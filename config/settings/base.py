@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from datetime import timedelta
 
+from django.conf.global_settings import AUTH_USER_MODEL
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -40,12 +41,14 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 CUSTOM_APPS = [
-
+    'apps.account',
+    'apps.technology',
 ]
 THIRD_PARTY_APPS = [
     'rest_framework',
     'drf_yasg',
     'rest_framework_simplejwt',
+    "phonenumber_field",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
@@ -140,3 +143,4 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=3),
     "REFRESH_TOKEN_LIFETIME": timedelta(weeks=1),
 }
+AUTH_USER_MODEL = 'account.Account'
