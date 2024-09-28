@@ -10,6 +10,7 @@ class Account(AbstractUser, TimeStampedModel):
     phone = PhoneNumberField(unique=True, region="UZ")
     is_active = models.BooleanField(default=False)
     role = models.CharField(max_length=255, choices=AccountRole.choices)
+    USERNAME_FIELD = 'phone'
 
 
 class AccountInfo(TimeStampedModel):
@@ -17,3 +18,4 @@ class AccountInfo(TimeStampedModel):
     profession = models.ForeignKey(to="technology.Profession", on_delete=models.SET_NULL, null=True)
     technologies = models.ManyToManyField("technology.Technology")
     is_visible = models.BooleanField(default=False)
+    account = models.OneToOneField("account.Account", on_delete=models.CASCADE)
