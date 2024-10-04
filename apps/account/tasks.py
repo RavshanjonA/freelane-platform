@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from celery import shared_task
 from django.core.cache import cache
 from django.db.models import Q
-from twilio.rest import Client
 
 from config.celery import app
 
