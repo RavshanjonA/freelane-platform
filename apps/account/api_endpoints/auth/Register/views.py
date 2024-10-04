@@ -8,7 +8,7 @@ from apps.account.models import Account
 class RegisterView(generics.CreateAPIView):
     queryset = Account.objects.all()
     serializer_class = RegisterSerializer
-    permission_classes = (AllowAny)
+    permission_classes = (AllowAny,)
 
 
 __all__ = ("RegisterView",)

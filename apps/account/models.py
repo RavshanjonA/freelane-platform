@@ -23,7 +23,7 @@ class AccountInfo(TimeStampedModel):
     profession = models.ForeignKey(to="technology.Profession", on_delete=models.SET_NULL, null=True)
     technologies = models.ManyToManyField("technology.Technology")
     is_visible = models.BooleanField(default=False)
-    account = models.OneToOneField("account.Account", on_delete=models.CASCADE)
+    account = models.OneToOneField("account.Account", on_delete=models.CASCADE,related_name='account_info')
 
     def __str__(self):
         return f"{self.account.phone} - {self.is_visible}"
