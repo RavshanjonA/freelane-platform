@@ -1,32 +1,12 @@
-from rest_framework.fields import ChoiceField
 from rest_framework.serializers import ModelSerializer
-
-from apps.job.models import JobAnnounce
+from apps.job.api_endpoints.job_technology.serializers import JobTechnologySerializer, JobTechnologyReadSerializer
+from apps.job.models import JobTechnology, JobAnnounce
 from apps.job.tasks import create_notification_for_developers
 
 
-#
-# class JobLevelChoice=(
-# ("junior", "Junior"),
-# ("middle", "Middle"),
-# ("senior", "Senior"),
-#     LEAD = "lead", "Lead"
-# )
-#
-# class JobTypeChoice(ChoiceField):
-#     FIXED_PRICE = 'fixed_price', "Fixed Price"
-#     HOURLY = 'hourly', "Hourly"
-#
-#
-# class PriceMeasureChoice(ChoiceField):
-#     UZS = "uzs", "UZS"
-#     USD = "usd", "USD"
-
-
 class JobAnnounceListCreateSerializer(ModelSerializer):
-    # job_type = JobTypeChoice()
-    # price_measure = PriceMeasureChoice()
-    # level = JobLevelChoice()
+    technology = JobTechnologySerializer(many=True, write_only=True)
+    technologies = JobTechnologyReadSerializer(source='jobtechnology_set', many=True, read_only=True)
 
     class Meta:
         model = JobAnnounce
@@ -38,12 +18,22 @@ class JobAnnounceListCreateSerializer(ModelSerializer):
             "price",
             "price_measure",
             "level",
-            "technology",
+            "technology", # post/patch
+            "technologies", # get
             "profession",
             "location"
         )
 
     def create(self, validated_data):
-        instance = super().create(validated_data)
-        create_notification_for_developers.delay(instance_id=instance.id)
-        return instance
+        technologies_data = validated_data.pop('technology')
+        job_announce = super().create(validated_data)
+
+        for technology_data in technologies_data:
+            JobTechnology.objects.create(
+                job=job_announce,
+                technology=technology_data['technology'],
+                level=technology_data['level']
+            )
+
+        create_notification_for_developers.delay(instance_id=job_announce.id)
+        return job_announce

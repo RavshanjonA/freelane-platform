@@ -21,3 +21,14 @@ def send_activation_code(self, phone):
 def delete_old_notifications():
     from apps.account.models import Notification
     Notification.objects.filter(Q(is_read=True) & Q(updated_at__lte=datetime.now() - timedelta(days=1))).delete()
+
+
+@shared_task
+def mark_read_last_week_notifications():
+    from apps.account.models import Notification
+    notifications = Notification.objects.filter(updated_at__lte=datetime.now() - timedelta(days=7))
+
+    for notification in notifications:
+        notification.is_read = True
+
+    Notification.objects.bulk_update(notifications, ['is_read'])
