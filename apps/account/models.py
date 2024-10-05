@@ -39,3 +39,26 @@ class Notification(TimeStampedModel):
     def mark_as_read(self):
         self.is_read = True
         self.save()
+
+class Card(TimeStampedModel):
+    card_number = models.CharField(max_length=16)
+    expire_date = models.DateField()
+    card_token = models.CharField(max_length=255)
+    cvv = models.CharField(max_length=3)
+    account = models.ForeignKey(to="account.AccountInfo", on_delete=models.CASCADE, related_name="cards")
+    address = models.ForeignKey(to='Address', on_delete=models.SET_NULL, null=True, default=None)
+
+    def __str__(self):
+        return f"{self.card_number} - {self.expire_date}"
+
+class Address(TimeStampedModel):
+    country = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    region = models.CharField(max_length=255)
+    define_address = models.CharField(max_length=1000)
+    house = models.CharField(max_length=5)
+    post_code = models.CharField(max_length=6)
+    phone = PhoneNumberField(unique=True, region="UZ")
+    timezone = models.CharField(max_length=255)
+
+

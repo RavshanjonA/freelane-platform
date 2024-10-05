@@ -21,6 +21,9 @@ app.conf.beat_schedule = {
         "task": "apps.account.tasks.delete_old_notifications",
         "schedule": crontab(minute=45, hour=21),
     },
-    # Load task modules from all registered Django apps.
+    "mark_as_read_old_notifications": {
+        "task": "apps.account.tasks.mark_as_read_old_notifications",
+        "schedule": crontab(hour='3'),
+    }
 }
 app.autodiscover_tasks()

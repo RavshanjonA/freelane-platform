@@ -50,6 +50,7 @@ THIRD_PARTY_APPS = [
     'drf_yasg',
     'rest_framework_simplejwt',
     "phonenumber_field",
+    'django_filters',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
