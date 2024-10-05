@@ -1,4 +1,4 @@
 from .base import *
 
-ALLOWED_HOSTS = ['your_domain']
+ALLOWED_HOSTS = ['127.0.0.1', '188.166.166.172']
 DEBUG = False
