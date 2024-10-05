@@ -43,6 +43,7 @@ DJANGO_APPS = [
 CUSTOM_APPS = [
     'apps.account',
     'apps.technology',
+    'apps.job',
 ]
 THIRD_PARTY_APPS = [
     'rest_framework',
@@ -139,8 +140,25 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+    }
+}
+
 SIMPLE_JWT = {
+    "TOKEN_OBTAIN_SERIALIZER": "account.api_endpoints.Login.serializers.LoginSerializer",
     "ACCESS_TOKEN_LIFETIME": timedelta(days=3),
     "REFRESH_TOKEN_LIFETIME": timedelta(weeks=1),
 }
 AUTH_USER_MODEL = 'account.Account'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
