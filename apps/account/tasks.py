@@ -27,6 +27,6 @@ def delete_old_notifications():
 @shared_task
 def mark_read_last_week_notification():
     from apps.account.models import Notification
-    Notification.objects.filter(Q(is_read=False) & Q(created_at__gte=datetime.now() - timedelta(days=7)))
-
-
+    notifications = Notification.objects.filter(
+        Q(is_read=False) & Q(created_at__gte=datetime.now() - timedelta(days=7)))
+    notifications.update(is_read=True)

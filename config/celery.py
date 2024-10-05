@@ -22,7 +22,7 @@ app.conf.beat_schedule = {
         "schedule": crontab(minute=45, hour=21),
     },
     "mark_as_read_old_notifications": {
-        "task": "apps.account.tasks.mark_as_read_old_notifications",
+        "task": "apps.account.tasks.mark_read_last_week_notification",
         "schedule": crontab(hour='3'),
     }
 }

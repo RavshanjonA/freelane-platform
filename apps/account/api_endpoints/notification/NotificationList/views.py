@@ -1,3 +1,4 @@
+from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -13,6 +14,7 @@ class NotificationListView(ListAPIView):
     queryset = Notification.objects.all()
     serializer_class = NotificationListSerializer
     filterset_class = NotificationFilterBackend
+    filter_backends = DjangoFilterBackend
 
     def get_queryset(self):
         return self.queryset.filter(account=self.request.user.accountinfo)
